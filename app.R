@@ -1,6 +1,4 @@
 # app.R
-library(tidyverse)
-library(readxl)
 # Gina Nichols, adapted from 
 # Noé Vandevoorde, October 2025
 
@@ -32,15 +30,16 @@ load_packages(c(
    "readxl",
    "ggnewscale",
    "ggpattern",
-   "devtools"
+   "devtools",
+   "DT"
 ))
 
-devtools::install_github("vanichols/ADOPTpkg")
+#devtools::install_github("vanichols/ADOPTpkg")
 library(ADOPTpkg)
 
 #### Sources ###################################################################
 
-source("R/prep_utils.R")
+#source("R/prep_utils.R")
 source("R/ui.R")
 source("R/server.R")
 
