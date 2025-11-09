@@ -13,6 +13,7 @@ library(ggnewscale)
 library(ggpattern)
 library(devtools)
 library(DT)
+library(patchwork)
 #devtools::install_github("vanichols/ADOPTpkg")
 library(ADOPTpkg)
 
