@@ -8,6 +8,8 @@
 
 server <- function(input, output, session) {
 
+  #--max size is 160 MB
+  options(shiny.maxRequestSize = 160*1024^2) #--recommended based on a help website
   #--use the data from the ADOPTpkg...need to check
   #df <- data
   df <- adopt_hpli #--data for first tab
