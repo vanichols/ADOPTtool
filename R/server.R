@@ -32,7 +32,7 @@ server <- function(input, output, session) {
         updateSelectInput(
           session,
           "substance_types",
-          choices = unique(df$compound_type) |>
+          choices = unique(df$compound_category) |>
             sort())
     # Substance family filter
       updateSelectInput(
@@ -62,7 +62,7 @@ server <- function(input, output, session) {
       if (!is.null(input$substance_types) && length(input$substance_types) > 0) {
         df_filtered <- 
           df_filtered |>
-          filter(compound_type %in% input$substance_types)
+          filter(compound_category %in% input$substance_types)
       }
 
     # Filter by family only if a family is selected
@@ -121,8 +121,8 @@ server <- function(input, output, session) {
         paste0(
           "Substance: ", input$substance_single, "\n\n",
           "      CAS: ", unique(data_sub$cas), "\n",
-          "Main type: ", unique(data_sub$compound_origin), " ", unique(data_sub$compound_type), "\n",
-          #" Sub type: ", unique(data_sub$sub_compound_type), "\n",
+          "Main type: ", unique(data_sub$compound_origin), " ", unique(data_sub$compound_category), "\n",
+          #" Sub type: ", unique(data_sub$sub_compound_category), "\n",
           "   Family: ", unique(data_sub$compound_group), "\n\n",
           "     Load: ", round(unique(data_sub$load_score), 3)
         )
@@ -132,8 +132,9 @@ server <- function(input, output, session) {
 ###### Display HPL visualisation graphh ######
   output$rose_plot <- renderPlot({
     req(input$substance_single)
-    adopt_Make_Rose_Plot(compound = input$substance_single, 
-                         data = single_substance_data())
+    adopt_Make_Rose_and_Dist_Plot(compound = input$substance_single, 
+                         #data = single_substance_data()
+                         data = df)
   })
 
 ###### Display HPL data table ######
@@ -142,10 +143,10 @@ server <- function(input, output, session) {
     data_sub <- single_substance_data()
     display_data <- 
       data_sub |>
-      mutate_if(is.numeric, round, 3) |> 
+      dplyr::mutate_if(is.numeric, round, 3) |> 
       #mutate(quality = ifelse(!is.na(missing), missing, quality)) |>
       #select(sub_compartment, attribute, value_chr, quality, index_value, weighted_index) |>
-      select(compound, env_raw, eco.terr_raw, eco.aqua_raw, hum_raw,
+      dplyr::select(compound, env_raw, eco.terr_raw, eco.aqua_raw, hum_raw,
              load_score, missing_share) #|>
       # rename(compartment = sub_compartment,
       #        metric = attribute,
@@ -153,12 +154,12 @@ server <- function(input, output, session) {
       #        `data quality` = quality,
       #        `metric load (unweighted)` = index_value,
       #        `metric load (weighted)` = weighted_index)
-      # rename(
+      # dplyr::rename(
       #   `environmental persistence index` = env_raw,
       #   `terrestrial ecological toxicity index` = eco.terr_raw,
       #   `aquatic ecological toxicity index` = eco.aqua_raw,
       #   `human health toxicity index` = hum_raw,
-      #   `total load (weighted)` = load_score) |> 
+      #   `total load (weighted)` = load_score) |>
     DT::datatable(
       display_data,
       options = list(scrollX = TRUE,
@@ -186,12 +187,12 @@ server <- function(input, output, session) {
   #   updateSelectInput(
   #     session,
   #     "substance_types1",
-  #     choices = unique(df1$compound_type) |>
+  #     choices = unique(df1$compound_category) |>
   #       sort())
   #   updateSelectInput(
   #     session,
   #     "substance_types2",
-  #     choices = unique(df2$compound_type) |>
+  #     choices = unique(df2$compound_category) |>
   #       sort())
   #   # Substance family filter
   #   updateSelectInput(
@@ -226,7 +227,7 @@ server <- function(input, output, session) {
   #   if (!is.null(input$substance_types1) && length(input$substance_types1) > 0) {
   #     df_filtered <- 
   #       df_filtered |>
-  #       filter(compound_type %in% input$substance_types1)
+  #       filter(compound_category %in% input$substance_types1)
   #   }
   #   
   #   # Filter by family only if a family is selected
@@ -258,7 +259,7 @@ server <- function(input, output, session) {
   #   if (!is.null(input$substance_types2) && length(input$substance_types2) > 0) {
   #     df_filtered <- 
   #       df_filtered |>
-  #       filter(compound_type %in% input$substance_types2)
+  #       filter(compound_category %in% input$substance_types2)
   #   }
   #   
   #   # Filter by family only if a family is selected
@@ -317,8 +318,8 @@ server <- function(input, output, session) {
   #     paste0(
   #       "Substance: ", input$substance_single, "\n\n",
   #       "      CAS: ", unique(data_sub$cas), "\n",
-  #       "Main type: ", unique(data_sub$compound_origin), " ", unique(data_sub$compound_type), "\n",
-  #       #" Sub type: ", unique(data_sub$sub_compound_type), "\n",
+  #       "Main type: ", unique(data_sub$compound_origin), " ", unique(data_sub$compound_category), "\n",
+  #       #" Sub type: ", unique(data_sub$sub_compound_category), "\n",
   #       "   Family: ", unique(data_sub$compound_group), "\n\n",
   #       "     Load: ", round(unique(data_sub$load_score), 3)
   #     )

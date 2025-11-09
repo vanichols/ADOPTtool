@@ -18,7 +18,7 @@
       "RemoteRepo": "ADOPTpkg",
       "RemoteUsername": "vanichols",
       "RemoteRef": "HEAD",
-      "RemoteSha": "ef7ccdae1f94c0d8659ee3ded490778f112d4389",
+      "RemoteSha": "a69db785257b996b910780b3c75be32d855fe7c9",
       "Requirements": [
         "R",
         "dplyr",
@@ -26,13 +26,14 @@
         "ggnewscale",
         "ggplot2",
         "ggridges",
+        "janitor",
         "magrittr",
         "patchwork",
         "scales",
         "stringr",
         "tidyr"
       ],
-      "Hash": "550fe0e7f703e0d4778743a048221499"
+      "Hash": "12ecb6a9f559b71daa9d3d53a3529aa3"
     },
     "DBI": {
       "Package": "DBI",
@@ -1115,6 +1116,28 @@
       ],
       "Hash": "0080607b4a1a7b28979aecef976d8bc2"
     },
+    "janitor": {
+      "Package": "janitor",
+      "Version": "2.2.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "dplyr",
+        "hms",
+        "lifecycle",
+        "lubridate",
+        "magrittr",
+        "purrr",
+        "rlang",
+        "snakecase",
+        "stringi",
+        "stringr",
+        "tidyr",
+        "tidyselect"
+      ],
+      "Hash": "64f308bf1fbf5f856cdf4b4c7c0ce51b"
+    },
     "jose": {
       "Package": "jose",
       "Version": "1.2.1",
@@ -1950,6 +1973,18 @@
         "utils"
       ],
       "Hash": "b39bc6c8dd72423ccf9e30ec7eb6a0f2"
+    },
+    "snakecase": {
+      "Package": "snakecase",
+      "Version": "0.11.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "stringi",
+        "stringr"
+      ],
+      "Hash": "58767e44739b76965332e8a4fe3f91f1"
     },
     "snowflakeauth": {
       "Package": "snowflakeauth",
