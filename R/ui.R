@@ -8,6 +8,8 @@
 
 ui <- dashboardPage(
 
+  #skin = "green", # Try: "blue", "black", "purple", "yellow", "red", "green"
+  
 
 ###### Header ##################################################################
 
@@ -30,8 +32,8 @@ ui <- dashboardPage(
       # ,menuItem("  Strategy Comparison View", tabName = "source", icon = icon("balance scale"))
     ),
 
-### Credit info, should link to adopt ipm website i suppose ###
-
+    ### Credit info, ADOPT IPM logo ###
+    
     div(
       style = "position: fixed;
                bottom: 15px;
@@ -39,12 +41,12 @@ ui <- dashboardPage(
                font-size: 12px;
                color: #888;
                z-index: 1000;",
-      HTML(#"<a href='https://sytra.be' target='_blank'>sytra.be</a><br>
-           "<a href='https://adopt-ipm.eu/' target='_blank'>adopt-ipm.eu</a><br>
+      # Add the image
+      #img(src = "adopt-ipm_logo-clean.png", height = "50px", width = "auto", style = "margin-bottom: 5px;"),
+      br(),
+      HTML("<a href='https://adopt-ipm.eu/' target='_blank'>adopt-ipm.eu</a><br>
              Nichols and Vandevoorde (2025)<br>
-            Last updated: Nov 2025<br>"
-            #<a href='mailto:noe.vandevoorde@uclouvain.be'>noe.vandevoorde@uclouvain.be</a>"
-           )
+            Last updated: Nov 2025<br>")
     )
   ),
 
@@ -52,6 +54,7 @@ ui <- dashboardPage(
 ###### Body ####################################################################
 
   dashboardBody(
+    
     tabItems(
 
 ###### Body: Single Substance Tab ######
