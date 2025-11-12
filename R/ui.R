@@ -4,13 +4,6 @@
 # Noé Vandevoorde octobre 2025
 
 
-library(shiny)
-library(shinydashboard)
-#library(readxl)
-#library(DT)
-#devtools::install_github("vanichols/ADOPTpkg")
-library(ADOPTpkg)
-
 #### User Interface ############################################################
 
 ui <- dashboardPage(
