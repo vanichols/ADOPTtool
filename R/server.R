@@ -55,21 +55,21 @@ server <- function(input, output, session) {
       if (!is.null(input$substance_origins) && length(input$substance_origins) > 0) {
         df_filtered <- 
           df_filtered |>
-          filter(compound_origin %in% input$substance_origins)
+          dplyr::filter(compound_origin %in% input$substance_origins)
       }
 
     # Filter by type only if a type is selected
       if (!is.null(input$substance_types) && length(input$substance_types) > 0) {
         df_filtered <- 
           df_filtered |>
-          filter(compound_category %in% input$substance_types)
+          dplyr::filter(compound_category %in% input$substance_types)
       }
 
     # Filter by family only if a family is selected
       if (!is.null(input$substance_groups) && length(input$substance_groups) > 0) {
         df_filtered <- 
           df_filtered |>
-          filter(str_detect(tolower(compound_group), input$substance_groups))
+          dplyr::filter(str_detect(tolower(compound_group), input$substance_groups))
       }
 
     # Format final substance list
@@ -146,7 +146,8 @@ server <- function(input, output, session) {
       dplyr::mutate_if(is.numeric, round, 3) |> 
       #mutate(quality = ifelse(!is.na(missing), missing, quality)) |>
       #select(sub_compartment, attribute, value_chr, quality, index_value, weighted_index) |>
-      dplyr::select(compound, env_raw, eco.terr_raw, eco.aqua_raw, hum_raw,
+      dplyr::select(compound, compound_type, 
+                    env_raw, eco.terr_raw, eco.aqua_raw, hum_raw,
              load_score, missing_share) #|>
       # rename(compartment = sub_compartment,
       #        metric = attribute,
@@ -160,7 +161,8 @@ server <- function(input, output, session) {
       #   `aquatic ecological toxicity index` = eco.aqua_raw,
       #   `human health toxicity index` = hum_raw,
       #   `total load (weighted)` = load_score) |>
-    DT::datatable(
+    #DT::datatable(
+    renderTable(
       display_data,
       options = list(scrollX = TRUE,
                      pageLength = 2,

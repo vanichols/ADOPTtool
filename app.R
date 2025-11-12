@@ -5,15 +5,10 @@
 
 #### Packages ##################################################################
 
-library(tidyverse)
 library(shiny)
 library(shinydashboard)
-library(readxl)
-library(ggnewscale)
-library(ggpattern)
-library(devtools)
-library(DT)
-library(patchwork)
+#library(readxl)
+#library(DT)
 #devtools::install_github("vanichols/ADOPTpkg")
 library(ADOPTpkg)
 
