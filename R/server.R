@@ -3,6 +3,12 @@
 # Gina Nichols, adopted from code created by
 # Noé Vandevoorde octobre 2025
 
+library(shiny)
+library(shinydashboard)
+#library(readxl)
+#library(DT)
+#devtools::install_github("vanichols/ADOPTpkg", force = T)
+library(ADOPTpkg)
 
 #### Server ####################################################################
 
@@ -69,7 +75,8 @@ server <- function(input, output, session) {
       if (!is.null(input$substance_groups) && length(input$substance_groups) > 0) {
         df_filtered <- 
           df_filtered |>
-          dplyr::filter(str_detect(tolower(compound_group), input$substance_groups))
+          dplyr::filter(stringr::str_detect(tolower(compound_group), 
+                                            input$substance_groups))
       }
 
     # Format final substance list
@@ -138,7 +145,7 @@ server <- function(input, output, session) {
   })
 
 ###### Display HPL data table ######
-  output$score_details <- DT::renderDataTable({
+  output$score_details <- shiny::renderDataTable({
     req(input$substance_single)
     data_sub <- single_substance_data()
     display_data <- 
@@ -162,7 +169,7 @@ server <- function(input, output, session) {
       #   `human health toxicity index` = hum_raw,
       #   `total load (weighted)` = load_score) |>
     #DT::datatable(
-    renderTable(
+    shiny::renderDataTable(
       display_data,
       options = list(scrollX = TRUE,
                      pageLength = 2,

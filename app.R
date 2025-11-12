@@ -11,6 +11,7 @@ library(shinydashboard)
 #library(DT)
 #devtools::install_github("vanichols/ADOPTpkg")
 library(ADOPTpkg)
+options(shiny.legacy.datatable = TRUE)
 
 #### Sources ###################################################################
 

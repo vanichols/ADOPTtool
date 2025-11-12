@@ -4,6 +4,13 @@
 # Noé Vandevoorde octobre 2025
 
 
+library(shiny)
+library(shinydashboard)
+#library(readxl)
+#library(DT)
+#devtools::install_github("vanichols/ADOPTpkg")
+library(ADOPTpkg)
+
 #### User Interface ############################################################
 
 ui <- dashboardPage(
@@ -117,7 +124,7 @@ ui <- dashboardPage(
                     status = "primary", # "info", "success", "warning",
                     solidHeader = TRUE,
                     width = 12,
-                    DT::dataTableOutput("score_details")
+                    shiny::renderDataTable("score_details")
                 )
               )
         )
