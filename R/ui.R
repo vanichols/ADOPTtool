@@ -111,112 +111,35 @@ ui <- dashboardPage(
                 )
               ),
 
-      # Data table
-              fluidRow(
-                box(title = "Load Score Details",
-                    status = "primary", # "info", "success", "warning",
-                    solidHeader = TRUE,
-                    width = 12,
-                    shiny::renderDataTable("score_details")
-                )
-              )
+      # # Data table
+      #         fluidRow(
+      #           box(title = "Load Score Details",
+      #               status = "primary", # "info", "success", "warning",
+      #               solidHeader = TRUE,
+      #               width = 12,
+      #               shiny::renderDataTable("score_details")
+      #           )
+      #         )
+      #   )
+      
+      # Download Data section - replaced the data table
+      fluidRow(
+        box(title = "Download Load Score Details",
+            status = "primary",
+            solidHeader = TRUE,
+            width = 12,
+            div(
+              style = "text-align: center; padding: 20px;",
+              p("Download the detailed load score data for the selected substance:"),
+              br(),
+              downloadButton("download_data", 
+                             "Download Data (TSV)", 
+                             class = "btn-primary btn-lg",
+                             icon = icon("download"))
+            )
         )
-
-# ###### Body: Substance comparison tab ######
-# ,
-# tabItem(tabName = "compare",
-#         fluidRow(
-#           
-#           # Substance 1 selection
-#           box(title = "Substance #1 Selection",
-#               status = "primary", # "info",
-#               solidHeader = TRUE,
-#               width = 4,
-#               
-#               # Filter options
-#               selectizeInput("substance_origins1",
-#                              label = NULL,
-#                              choices = NULL, # populated from data in the server
-#                              multiple = TRUE,
-#                              selected = NULL,
-#                              options = list(placeholder = "Filter by origin")),
-#               selectizeInput("substance_types1",
-#                              label = NULL,
-#                              choices = NULL,  # populated from data in the server
-#                              multiple = TRUE,
-#                              selected = NULL,
-#                              options = list(placeholder = "Filter by type")),
-#               selectizeInput("substance_groups1",
-#                              label = NULL,
-#                              choices = NULL,  # populated from data in the server
-#                              multiple = TRUE,
-#                              selected = NULL,
-#                              options = list(placeholder = "Filter by family")),
-#               # Substance selection
-#               selectInput("substance_single1",
-#                           "Select Substance:",
-#                           choices = NULL, # populated from data in the server
-#                           selected = NULL)
-#           ),
-#           
-#           # Substance 2 selection
-#           box(title = "Substance #2 Selection",
-#               status = "primary", # "info",
-#               solidHeader = TRUE,
-#               width = 4,
-#               
-#               # Filter options
-#               selectizeInput("substance_origins2",
-#                              label = NULL,
-#                              choices = NULL, # populated from data in the server
-#                              multiple = TRUE,
-#                              selected = NULL,
-#                              options = list(placeholder = "Filter by origin")),
-#               selectizeInput("substance_types2",
-#                              label = NULL,
-#                              choices = NULL,  # populated from data in the server
-#                              multiple = TRUE,
-#                              selected = NULL,
-#                              options = list(placeholder = "Filter by type")),
-#               selectizeInput("substance_groups2",
-#                              label = NULL,
-#                              choices = NULL,  # populated from data in the server
-#                              multiple = TRUE,
-#                              selected = NULL,
-#                              options = list(placeholder = "Filter by family")),
-#               # Substance selection
-#               selectInput("substance_single2",
-#                           "Select Substance:",
-#                           choices = NULL, # populated from data in the server
-#                           selected = NULL)
-#           ),
-#         
-#         # HPL graph
-#         fluidRow(
-#           box(title = "Harmonised Pesticide Load Score Comparison",
-#               status = "primary",
-#               solidHeader = TRUE,
-#               width = 12,
-#               plotOutput("paired_rose_plots",
-#                          height = "500px")
-#           )
-#         ),
-#         
-#         # Data table
-#         fluidRow(
-#           box(title = "Load Score Details",
-#               status = "primary", # "info", "success", "warning",
-#               solidHeader = TRUE,
-#               width = 12,
-#               DT::dataTableOutput("score_details")
-#           )
-#         )
-# )
-
-###### Body: Other Tab ######
-
-# Other tabs to be added here, e.g.:
-
+      )
+      )
     )
   )
 )

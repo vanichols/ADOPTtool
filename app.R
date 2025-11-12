@@ -7,15 +7,11 @@
 
 library(shiny)
 library(shinydashboard)
-#library(readxl)
-#library(DT)
 #devtools::install_github("vanichols/ADOPTpkg")
 library(ADOPTpkg)
-options(shiny.legacy.datatable = TRUE)
 
 #### Sources ###################################################################
 
-#source("R/prep_utils.R")
 source("R/ui.R")
 source("R/server.R")
 
