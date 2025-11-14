@@ -142,7 +142,91 @@ ui <- dashboardPage(
             )
         )
       )
-      )
+      ),
+
+###### Body: Two Substance Tab ######
+
+tabItem(tabName = "compare",
+        fluidRow(
+          
+          # Substance1 selection
+          box(title = "First substance selection",
+              status = "primary", # "info",
+              solidHeader = TRUE,
+              width = 4,
+              
+              # Filter options
+              selectizeInput("substance_origins1",
+                             label = NULL,
+                             choices = NULL, # populated from data in the server
+                             multiple = TRUE,
+                             selected = NULL,
+                             options = list(placeholder = "Filter by origin")),
+              selectizeInput("substance_types1",
+                             label = NULL,
+                             choices = NULL,  # populated from data in the server
+                             multiple = TRUE,
+                             selected = NULL,
+                             options = list(placeholder = "Filter by type")),
+              selectizeInput("substance_groups1",
+                             label = NULL,
+                             choices = NULL,  # populated from data in the server
+                             multiple = TRUE,
+                             selected = NULL,
+                             options = list(placeholder = "Filter by family")),
+              # Substance selection
+              selectInput("substance_double1",
+                          "Select Substance:",
+                          choices = NULL, # populated from data in the server
+                          selected = NULL)
+          ),
+          
+          # Substance2 selection
+          box(title = "Second substance selection",
+              status = "primary", # "info",
+              solidHeader = TRUE,
+              width = 4,
+              
+              # Filter options
+              selectizeInput("substance_origins2",
+                             label = NULL,
+                             choices = NULL, # populated from data in the server
+                             multiple = TRUE,
+                             selected = NULL,
+                             options = list(placeholder = "Filter by origin")),
+              selectizeInput("substance_types2",
+                             label = NULL,
+                             choices = NULL,  # populated from data in the server
+                             multiple = TRUE,
+                             selected = NULL,
+                             options = list(placeholder = "Filter by type")),
+              selectizeInput("substance_groups2",
+                             label = NULL,
+                             choices = NULL,  # populated from data in the server
+                             multiple = TRUE,
+                             selected = NULL,
+                             options = list(placeholder = "Filter by family")),
+              # Substance selection
+              selectInput("substance_double2",
+                          "Select Substance:",
+                          choices = NULL, # populated from data in the server
+                          selected = NULL)
+          )
+          ),
+        
+        # Figure with both substances
+        fluidRow(
+          box(title = "",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 12,
+              plotOutput("rose_plot_paired",
+                         height = "500px")
+          )
+        ),
+        
+       
+)
     )
   )
 )

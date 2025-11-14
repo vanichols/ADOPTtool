@@ -18,7 +18,7 @@ server <- function(input, output, session) {
   #options(shiny.maxRequestSize = 160*1024^2) #--recommended based on a help website
   #--use the data from the ADOPTpkg...need to check
   #df <- data
-  df <- adopt_hpli #--data for first tab
+  df <- adopt_hpli #--data for first tab?
   #df1 <- adopt_hpli #--data for second tab, 1st choice
   #df2 <- adopt_hpli #--data for second tab, 2nd choice
 
@@ -169,6 +169,178 @@ server <- function(input, output, session) {
                   quote = FALSE)
     }
   )
+  
+  # Second tab ====
+  
+  ###### Populate filter lists (runs once at app startup) ######
+  
+  observeEvent(TRUE, {
+    # Substance origin filter
+    updateSelectInput(
+      session,
+      "substance_origins1",
+      choices = unique(df$compound_origin) |>
+        sort())
+    # Substance type filter
+    updateSelectInput(
+      session,
+      "substance_types1",
+      choices = unique(df$compound_category) |>
+        sort())
+    # Substance family filter
+    updateSelectInput(
+      session,
+      "substance_groups1",
+      choices = unique(df$compound_group) |>
+        sort())
+  },
+  once = TRUE)
+  
+  observeEvent(TRUE, {
+    # Substance origin filter
+    updateSelectInput(
+      session,
+      "substance_origins2",
+      choices = unique(df$compound_origin) |>
+        sort())
+    # Substance type filter
+    updateSelectInput(
+      session,
+      "substance_types2",
+      choices = unique(df$compound_category) |>
+        sort())
+    # Substance family filter
+    updateSelectInput(
+      session,
+      "substance_groups2",
+      choices = unique(df$compound_group) |>
+        sort())
+  },
+  once = TRUE)
+  
+  
+  
+  ###### Populate list of substance (reacts on filters) ######
+  #--data for second tab, 1st choice
+  substance_choices1 <- reactive({
+    
+    df_filtered1 <- df
+    
+    # Filter by origin only if an origin is selected
+    if (!is.null(input$substance_origins1) && length(input$substance_origins1) > 0) {
+      df_filtered1 <- 
+        df_filtered1 |>
+        dplyr::filter(compound_origin %in% input$substance_origins1)
+    }
+    
+    # Filter by type only if a type is selected
+    if (!is.null(input$substance_types1) && length(input$substance_types1) > 0) {
+      df_filtered1 <- 
+        df_filtered1 |>
+        dplyr::filter(compound_category %in% input$substance_types1)
+    }
+    
+    # Filter by family only if a family is selected
+    if (!is.null(input$substance_groups1) && length(input$substance_groups1) > 0) {
+      df_filtered1 <- 
+        df_filtered1 |>
+        dplyr::filter(stringr::str_detect(tolower(compound_group), 
+                                          input$substance_groups1))
+    }
+    
+    # Format final substance list
+    df_filtered1 |>
+      dplyr::pull(compound) |>
+      unique() |>
+      sort()
+  })
+  
+  #--data for second tab, 2nd choice
+  substance_choices2 <- reactive({
+    
+    df_filtered2 <- df
+    
+    # Filter by origin only if an origin is selected
+    if (!is.null(input$substance_origins2) && length(input$substance_origins2) > 0) {
+      df_filtered2 <- 
+        df_filtered2 |>
+        dplyr::filter(compound_origin %in% input$substance_origins2)
+    }
+    
+    # Filter by type only if a type is selected
+    if (!is.null(input$substance_types2) && length(input$substance_types2) > 0) {
+      df_filtered2 <- 
+        df_filtered2 |>
+        dplyr::filter(compound_category %in% input$substance_types2)
+    }
+    
+    # Filter by family only if a family is selected
+    if (!is.null(input$substance_groups2) && length(input$substance_groups2) > 0) {
+      df_filtered2 <- 
+        df_filtered2 |>
+        dplyr::filter(stringr::str_detect(tolower(compound_group), 
+                                          input$substance_groups2))
+    }
+    
+    # Format final substance list
+    df_filtered2 |>
+      dplyr::pull(compound) |>
+      unique() |>
+      sort()
+  })
+  
+  ###### Selected substance1 based on user choice ######
+  observe({
+    choices1 <- substance_choices1()
+    selected1 <- isolate(input$substance_double1)
+    if (!is.null(selected1)) selected1 <- selected1[selected1 %in% choices1]
+    updateSelectInput(session, "substance_double1",
+                      choices = choices1,
+                      selected = selected1)
+    updateSelectInput(session, "substances_compare1", choices = choices1)
+  })
+  
+  # If current selection is no longer valid (e.g. after a new filter is applied), clear it
+  observe({
+    valid_choices <- substance_choices1()
+    current <- input$substance_double1
+    if (!is.null(current) && !current %in% valid_choices) {
+      updateSelectInput(session, "substance_double1", selected = "")
+    }
+  })
+  
+  ###### Selected substance2 based on user choice ######
+  observe({
+    choices2 <- substance_choices2()
+    selected2 <- isolate(input$substance_double2)
+    if (!is.null(selected2)) selected2 <- selected2[selected2 %in% choices2]
+    updateSelectInput(session, "substance_double2",
+                      choices = choices2,
+                      selected = selected2)
+    updateSelectInput(session, "substances_compare2", choices = choices2)
+  })
+  
+  # If current selection is no longer valid (e.g. after a new filter is applied), clear it
+  observe({
+    valid_choices <- substance_choices2()
+    current <- input$substance_double2
+    if (!is.null(current) && !current %in% valid_choices) {
+      updateSelectInput(session, "substance_double2", selected = "")
+    }
+  })
+  
+  
+  ###### Display HPL visualisation graph ######
+  output$rose_plot_paired <- renderPlot({
+    req(input$substance_double1)
+    req(input$substance_double2)
+    adopt_Make_Paired_Rose_Plots(compound_name1 = input$substance_double1, 
+                                 compound_name2 = input$substance_double2,
+                                  #data = single_substance_data()
+                                  data = df)
+  })
+  
+
   
 }
 
