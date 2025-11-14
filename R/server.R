@@ -340,6 +340,15 @@ server <- function(input, output, session) {
                                   data = df)
   })
   
+  output$rose_plot_paired_dist <- renderPlot({
+    req(input$substance_double1)
+    req(input$substance_double2)
+    adopt_Make_(compound_name1 = input$substance_double1, 
+                                 compound_name2 = input$substance_double2,
+                                 #data = single_substance_data()
+                                 data = df)
+  })
+  
 
   
 }

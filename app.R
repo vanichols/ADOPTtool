@@ -7,7 +7,7 @@
 
 library(shiny)
 library(shinydashboard)
-#devtools::install_github("vanichols/ADOPTpkg")
+#devtools::install_github("vanichols/ADOPTpkg", force = T)
 library(ADOPTpkg)
 
 #### Sources ###################################################################

@@ -108,7 +108,7 @@ ui <- dashboardPage(
                 box(title = "Harmonised Pesticide Load Score",
                     status = "primary",
                     solidHeader = TRUE,
-                    width = 12,
+                    width = 8,
                     plotOutput("rose_plot",
                                height = "500px")
                 )
@@ -130,7 +130,7 @@ ui <- dashboardPage(
         box(title = "Download Load Score Details",
             status = "primary",
             solidHeader = TRUE,
-            width = 12,
+            width = 8,
             div(
               style = "text-align: center; padding: 20px;",
               p("Download the detailed load score data for the selected substance:"),
@@ -153,7 +153,7 @@ tabItem(tabName = "compare",
           box(title = "First substance selection",
               status = "primary", # "info",
               solidHeader = TRUE,
-              width = 4,
+              width = 6,
               
               # Filter options
               selectizeInput("substance_origins1",
@@ -185,7 +185,7 @@ tabItem(tabName = "compare",
           box(title = "Second substance selection",
               status = "primary", # "info",
               solidHeader = TRUE,
-              width = 4,
+              width = 6,
               
               # Filter options
               selectizeInput("substance_origins2",
@@ -219,8 +219,18 @@ tabItem(tabName = "compare",
           box(title = "",
               status = "primary",
               solidHeader = TRUE,
-              width = 12,
+              width = 8,
               plotOutput("rose_plot_paired",
+                         height = "500px")
+          )
+        ),
+        #--figure with distributions
+        fluidRow(
+          box(title = "",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 4,
+              plotOutput("rose_plot_paired_dist",
                          height = "500px")
           )
         ),
