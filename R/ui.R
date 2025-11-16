@@ -41,7 +41,7 @@ ui <- dashboardPage(
                font-size: 12px;
                color: #888;
                z-index: 1000;",
-      # Add the image
+      # Add the adopt ipm logo (not working)
       #img(src = "adopt-ipm_logo-clean.png", height = "50px", width = "auto", style = "margin-bottom: 5px;"),
       br(),
       HTML("<a href='https://adopt-ipm.eu/' target='_blank'>adopt-ipm.eu</a><br>
@@ -103,34 +103,31 @@ ui <- dashboardPage(
                 )
               ),
 
-      # HPL graph
+      # Two graphs, one rose and one distribution
               fluidRow(
-                box(title = "Harmonised Pesticide Load Score",
+                box(title = "Load Scores by Compartment",
+                    status = "primary",
+                    solidHeader = TRUE,
+                    width = 4,
+                    plotOutput("rose_plot",
+                               height = "500px")
+                ),
+                box(title = "Load Score Relative to All Substances",
                     status = "primary",
                     solidHeader = TRUE,
                     width = 8,
-                    plotOutput("rose_plot",
+                    plotOutput("dist_plot",
                                height = "500px")
                 )
               ),
 
-      # # Data table
-      #         fluidRow(
-      #           box(title = "Load Score Details",
-      #               status = "primary", # "info", "success", "warning",
-      #               solidHeader = TRUE,
-      #               width = 12,
-      #               shiny::renderDataTable("score_details")
-      #           )
-      #         )
-      #   )
-      
+
       # Download Data section - replaced the data table
       fluidRow(
         box(title = "Download Load Score Details",
             status = "primary",
             solidHeader = TRUE,
-            width = 8,
+            width = 12,
             div(
               style = "text-align: center; padding: 20px;",
               p("Download the detailed load score data for the selected substance:"),
@@ -153,7 +150,7 @@ tabItem(tabName = "compare",
           box(title = "First substance selection",
               status = "primary", # "info",
               solidHeader = TRUE,
-              width = 6,
+              width = 4,
               
               # Filter options
               selectizeInput("substance_origins1",
@@ -181,11 +178,14 @@ tabItem(tabName = "compare",
                           selected = NULL)
           ),
           
+          # Blank space between boxes
+          column(width = 4),
+          
           # Substance2 selection
           box(title = "Second substance selection",
               status = "primary", # "info",
               solidHeader = TRUE,
-              width = 6,
+              width = 4,
               
               # Filter options
               selectizeInput("substance_origins2",
@@ -214,26 +214,32 @@ tabItem(tabName = "compare",
           )
           ),
         
-        # Figure with both substances
         fluidRow(
-          box(title = "",
-              status = "primary",
-              solidHeader = TRUE,
-              width = 8,
-              plotOutput("rose_plot_paired",
-                         height = "500px")
-          )
-        ),
-        #--figure with distributions
-        fluidRow(
+          # Rose plot first substance
           box(title = "",
               status = "primary",
               solidHeader = TRUE,
               width = 4,
-              plotOutput("rose_plot_paired_dist",
+              plotOutput("rose_plot1",
+                         height = "500px")
+          ),
+          #--figure with distributions
+          box(title = "",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 4,
+              plotOutput("dist_plot_both",
+                         height = "500px")
+          ),
+          # Rose plot second substance
+          box(title = "",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 4,
+              plotOutput("rose_plot2",
                          height = "500px")
           )
-        ),
+        )
         
        
 )

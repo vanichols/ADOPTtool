@@ -1,26 +1,13 @@
 # server.R
 
-# Gina Nichols, adopted from code created by
-# Noé Vandevoorde octobre 2025
-
-library(shiny)
-library(shinydashboard)
-#library(readxl)
-#library(DT)
-#devtools::install_github("vanichols/ADOPTpkg", force = T)
-library(ADOPTpkg)
-
 #### Server ####################################################################
 
 server <- function(input, output, session) {
 
   #--max size is 160 MB
   #options(shiny.maxRequestSize = 160*1024^2) #--recommended based on a help website
-  #--use the data from the ADOPTpkg...need to check
-  #df <- data
-  df <- adopt_hpli #--data for first tab?
-  #df1 <- adopt_hpli #--data for second tab, 1st choice
-  #df2 <- adopt_hpli #--data for second tab, 2nd choice
+  #--use the data from the ADOPTpkg
+  df <- adopt_hpli #--data for first tab at least...
 
   # First tab ====
     
@@ -136,15 +123,21 @@ server <- function(input, output, session) {
       }
     })
 
-###### Display HPL visualisation graphh ######
+###### Display load visualization as rose plot ######
   output$rose_plot <- renderPlot({
     req(input$substance_single)
-    adopt_Make_Rose_and_Dist_Plot(compound = input$substance_single, 
+    adopt_Make_Rose_Plot(compound = input$substance_single, 
                          #data = single_substance_data()
                          data = df)
   })
 
-  ###### Download HPL data instead of displaying table ######
+  ###### Display load on distribution ######
+  output$dist_plot <- renderPlot({
+    req(input$substance_single)
+    adopt_Make_Distribution_Plot(compound = input$substance_single, 
+                         data = df)
+  })
+  ###### Download data option ######
   output$download_data <- downloadHandler(
     filename = function() {
       req(input$substance_single)
@@ -331,21 +324,23 @@ server <- function(input, output, session) {
   
   
   ###### Display HPL visualisation graph ######
-  output$rose_plot_paired <- renderPlot({
+  output$rose_plot1 <- renderPlot({
     req(input$substance_double1)
-    req(input$substance_double2)
-    adopt_Make_Paired_Rose_Plots(compound_name1 = input$substance_double1, 
-                                 compound_name2 = input$substance_double2,
-                                  #data = single_substance_data()
+    adopt_Make_Rose_Plot(compound_name = input$substance_double1,
                                   data = df)
   })
   
-  output$rose_plot_paired_dist <- renderPlot({
+  output$dist_plot_both <- renderPlot({
     req(input$substance_double1)
     req(input$substance_double2)
-    adopt_Make_(compound_name1 = input$substance_double1, 
-                                 compound_name2 = input$substance_double2,
-                                 #data = single_substance_data()
+    adopt_Make_Distribution_Plot(compounds = c(input$substance_double1,
+                                               input$substance_double2),
+                                 data = df)
+  })
+  
+  output$rose_plot2 <- renderPlot({
+    req(input$substance_double2)
+    adopt_Make_Rose_Plot(compound_name = input$substance_double2,
                                  data = df)
   })
   
