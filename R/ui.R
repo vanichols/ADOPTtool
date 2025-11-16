@@ -1,4 +1,7 @@
 # ui.R
+library(shiny)
+library(shinydashboard)
+library(ADOPTpkg)
 
 # Gina Nichols, adapted from code created by
 # Noé Vandevoorde octobre 2025
@@ -6,7 +9,7 @@
 
 #### User Interface ############################################################
 
-ui <- dashboardPage(
+ui <- shinydashboard::dashboardPage(
 
   #skin = "green", # Try: "blue", "black", "purple", "yellow", "red", "green"
   
@@ -166,21 +169,11 @@ tabItem(tabName = "compare",
                              multiple = TRUE,
                              selected = NULL,
                              options = list(placeholder = "Filter by origin")),
-              # selectizeInput("substance_groups1",
-              #                label = NULL,
-              #                choices = NULL,  # populated from data in the server
-              #                multiple = TRUE,
-              #                selected = NULL,
-              #                options = list(placeholder = "Filter by family")),
-              # Substance selection
               selectInput("substance_double1",
                           "Select Substance:",
                           choices = NULL, # populated from data in the server
                           selected = NULL)
           ),
-          
-          # Blank space between boxes
-          column(width = 4),
           
           # Substance2 selection
           box(title = "Second substance selection",
@@ -202,45 +195,43 @@ tabItem(tabName = "compare",
                              selected = NULL,
                              options = list(placeholder = "Filter by origin")),
              
-              # selectizeInput("substance_groups2",
-              #                label = NULL,
-              #                choices = NULL,  # populated from data in the server
-              #                multiple = TRUE,
-              #                selected = NULL,
-              #                options = list(placeholder = "Filter by family")),
               # Substance selection
               selectInput("substance_double2",
                           "Select Substance:",
                           choices = NULL, # populated from data in the server
                           selected = NULL)
-          )
+          ),
+          # Blank space
+          column(width = 4)
+          
           ),
         
         fluidRow(
           # Rose plot first substance
-          box(title = "",
+          box(title = "First Substance Load Scores",
               status = "primary",
               solidHeader = TRUE,
               width = 4,
               plotOutput("rose_plot1",
                          height = "500px")
           ),
+          
+          # Rose plot second substance
+          box(title = "Second Substance Load Scores",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 4,
+              plotOutput("rose_plot2",
+                         height = "500px")
+          ),
           #--figure with distributions
-          box(title = "",
+          box(title = "Load Score(s) Relative to All Substances",
               status = "primary",
               solidHeader = TRUE,
               width = 4,
               plotOutput("dist_plot_both",
                          height = "500px")
           ),
-          # Rose plot second substance
-          box(title = "",
-              status = "primary",
-              solidHeader = TRUE,
-              width = 4,
-              plotOutput("rose_plot2",
-                         height = "500px")
-          )
         )
         
        
