@@ -15,24 +15,24 @@ server <- function(input, output, session) {
 
 
   observeEvent(TRUE, {
-    # Substance origin filter
-      updateSelectInput(
-        session,
-        "substance_origins",
-        choices = unique(df$compound_origin) |>
-          sort())
-    # Substance type filter
+    # Substance category filter
         updateSelectInput(
           session,
-          "substance_types",
+          "substance_category",
           choices = unique(df$compound_category) |>
             sort())
-    # Substance family filter
-      updateSelectInput(
-        session,
-        "substance_groups",
-        choices = unique(df$compound_group) |>
-          sort())
+    # Substance origin filter
+    updateSelectInput(
+      session,
+      "substance_origins",
+      choices = unique(df$compound_origin) |>
+        sort())
+    # # Substance family filter
+    #   updateSelectInput(
+    #     session,
+    #     "substance_groups",
+    #     choices = unique(df$compound_group) |>
+    #       sort())
     },
     once = TRUE)
   
@@ -51,20 +51,20 @@ server <- function(input, output, session) {
           dplyr::filter(compound_origin %in% input$substance_origins)
       }
 
-    # Filter by type only if a type is selected
-      if (!is.null(input$substance_types) && length(input$substance_types) > 0) {
+    # Filter by category only if a category is selected
+      if (!is.null(input$substance_category) && length(input$substance_category) > 0) {
         df_filtered <- 
           df_filtered |>
-          dplyr::filter(compound_category %in% input$substance_types)
+          dplyr::filter(compound_category %in% input$substance_category)
       }
 
-    # Filter by family only if a family is selected
-      if (!is.null(input$substance_groups) && length(input$substance_groups) > 0) {
-        df_filtered <- 
-          df_filtered |>
-          dplyr::filter(stringr::str_detect(tolower(compound_group), 
-                                            input$substance_groups))
-      }
+    # # Filter by family only if a family is selected
+    #   if (!is.null(input$substance_groups) && length(input$substance_groups) > 0) {
+    #     df_filtered <- 
+    #       df_filtered |>
+    #       dplyr::filter(stringr::str_detect(tolower(compound_group), 
+    #                                         input$substance_groups))
+    #   }
 
     # Format final substance list
       df_filtered |>
@@ -90,6 +90,7 @@ server <- function(input, output, session) {
     current <- input$substance_single
     if (!is.null(current) && !current %in% valid_choices) {
       updateSelectInput(session, "substance_single", selected = "")
+      #updateSelectInput(session, "substances_compare", selected = "")
     }
   })
 
@@ -115,7 +116,8 @@ server <- function(input, output, session) {
         paste0(
           "Substance: ", input$substance_single, "\n\n",
           "      CAS: ", unique(data_sub$cas), "\n",
-          "Main type: ", unique(data_sub$compound_origin), " ", unique(data_sub$compound_category), "\n",
+          " Category: ", unique(data_sub$compound_type), "\n",
+          "   Origin: ", unique(data_sub$compound_origin), "\n",
           #" Sub type: ", unique(data_sub$sub_compound_category), "\n",
           "   Family: ", unique(data_sub$compound_group), "\n\n",
           "     Load: ", round(unique(data_sub$load_score), 3)
@@ -127,8 +129,7 @@ server <- function(input, output, session) {
   output$rose_plot <- renderPlot({
     req(input$substance_single)
     adopt_Make_Rose_Plot(compound_name = input$substance_single, 
-                         #data = single_substance_data()
-                         data = df)
+                        data = df)
   })
 
   ###### Display load on distribution ######
@@ -168,46 +169,46 @@ server <- function(input, output, session) {
   ###### Populate filter lists (runs once at app startup) ######
   
   observeEvent(TRUE, {
+    # Substance category filter
+    updateSelectInput(
+      session,
+      "substance_category1",
+      choices = unique(df$compound_category) |>
+        sort())
     # Substance origin filter
     updateSelectInput(
       session,
       "substance_origins1",
       choices = unique(df$compound_origin) |>
         sort())
-    # Substance type filter
-    updateSelectInput(
-      session,
-      "substance_types1",
-      choices = unique(df$compound_category) |>
-        sort())
-    # Substance family filter
-    updateSelectInput(
-      session,
-      "substance_groups1",
-      choices = unique(df$compound_group) |>
-        sort())
+   # # Substance family filter
+   #  updateSelectInput(
+   #    session,
+   #    "substance_groups1",
+   #    choices = unique(df$compound_group) |>
+   #      sort())
   },
   once = TRUE)
   
   observeEvent(TRUE, {
+    # Substance type filter
+    updateSelectInput(
+      session,
+      "substance_category2",
+      choices = unique(df$compound_category) |>
+        sort())
     # Substance origin filter
     updateSelectInput(
       session,
       "substance_origins2",
       choices = unique(df$compound_origin) |>
         sort())
-    # Substance type filter
-    updateSelectInput(
-      session,
-      "substance_types2",
-      choices = unique(df$compound_category) |>
-        sort())
-    # Substance family filter
-    updateSelectInput(
-      session,
-      "substance_groups2",
-      choices = unique(df$compound_group) |>
-        sort())
+    # # Substance family filter
+    # updateSelectInput(
+    #   session,
+    #   "substance_groups2",
+    #   choices = unique(df$compound_group) |>
+    #     sort())
   },
   once = TRUE)
   
@@ -226,20 +227,20 @@ server <- function(input, output, session) {
         dplyr::filter(compound_origin %in% input$substance_origins1)
     }
     
-    # Filter by type only if a type is selected
-    if (!is.null(input$substance_types1) && length(input$substance_types1) > 0) {
+    # Filter by type only if a category is selected
+    if (!is.null(input$substance_category1) && length(input$substance_category1) > 0) {
       df_filtered1 <- 
         df_filtered1 |>
-        dplyr::filter(compound_category %in% input$substance_types1)
+        dplyr::filter(compound_category %in% input$substance_category1)
     }
     
-    # Filter by family only if a family is selected
-    if (!is.null(input$substance_groups1) && length(input$substance_groups1) > 0) {
-      df_filtered1 <- 
-        df_filtered1 |>
-        dplyr::filter(stringr::str_detect(tolower(compound_group), 
-                                          input$substance_groups1))
-    }
+    # # Filter by family only if a family is selected
+    # if (!is.null(input$substance_groups1) && length(input$substance_groups1) > 0) {
+    #   df_filtered1 <- 
+    #     df_filtered1 |>
+    #     dplyr::filter(stringr::str_detect(tolower(compound_group), 
+    #                                       input$substance_groups1))
+    # }
     
     # Format final substance list
     df_filtered1 |>
@@ -260,20 +261,20 @@ server <- function(input, output, session) {
         dplyr::filter(compound_origin %in% input$substance_origins2)
     }
     
-    # Filter by type only if a type is selected
-    if (!is.null(input$substance_types2) && length(input$substance_types2) > 0) {
+    # Filter by type only if a category is selected
+    if (!is.null(input$substance_category2) && length(input$substance_category2) > 0) {
       df_filtered2 <- 
         df_filtered2 |>
-        dplyr::filter(compound_category %in% input$substance_types2)
+        dplyr::filter(compound_category %in% input$substance_category2)
     }
     
-    # Filter by family only if a family is selected
-    if (!is.null(input$substance_groups2) && length(input$substance_groups2) > 0) {
-      df_filtered2 <- 
-        df_filtered2 |>
-        dplyr::filter(stringr::str_detect(tolower(compound_group), 
-                                          input$substance_groups2))
-    }
+    # # Filter by family only if a family is selected
+    # if (!is.null(input$substance_groups2) && length(input$substance_groups2) > 0) {
+    #   df_filtered2 <- 
+    #     df_filtered2 |>
+    #     dplyr::filter(stringr::str_detect(tolower(compound_group), 
+    #                                       input$substance_groups2))
+    # }
     
     # Format final substance list
     df_filtered2 |>
@@ -290,7 +291,6 @@ server <- function(input, output, session) {
     updateSelectInput(session, "substance_double1",
                       choices = choices1,
                       selected = selected1)
-    updateSelectInput(session, "substances_compare1", choices = choices1)
   })
   
   # If current selection is no longer valid (e.g. after a new filter is applied), clear it
@@ -310,7 +310,6 @@ server <- function(input, output, session) {
     updateSelectInput(session, "substance_double2",
                       choices = choices2,
                       selected = selected2)
-    updateSelectInput(session, "substances_compare2", choices = choices2)
   })
   
   # If current selection is no longer valid (e.g. after a new filter is applied), clear it
@@ -332,7 +331,6 @@ server <- function(input, output, session) {
   
   output$dist_plot_both <- renderPlot({
     req(input$substance_double1)
-    req(input$substance_double2)
     adopt_Make_Distribution_Plot(compound_names = c(input$substance_double1,
                                                input$substance_double2),
                                  data = df)

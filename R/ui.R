@@ -69,24 +69,25 @@ ui <- dashboardPage(
                     width = 4,
 
           # Filter options
-                  selectizeInput("substance_origins",
+          selectizeInput("substance_category",
+                         label = NULL,
+                         choices = NULL,  # populated from data in the server
+                         multiple = TRUE,
+                         selected = NULL,
+                         options = list(placeholder = "Filter by category")),
+          selectizeInput("substance_origins",
                                  label = NULL,
                                  choices = NULL, # populated from data in the server
                                  multiple = TRUE,
                                  selected = NULL,
                                  options = list(placeholder = "Filter by origin")),
-                  selectizeInput("substance_types",
-                                 label = NULL,
-                                 choices = NULL,  # populated from data in the server
-                                 multiple = TRUE,
-                                 selected = NULL,
-                                 options = list(placeholder = "Filter by type")),
-                  selectizeInput("substance_groups",
-                                 label = NULL,
-                                 choices = NULL,  # populated from data in the server
-                                 multiple = TRUE,
-                                 selected = NULL,
-                                 options = list(placeholder = "Filter by family")),
+
+                  # selectizeInput("substance_groups",
+                  #                label = NULL,
+                  #                choices = NULL,  # populated from data in the server
+                  #                multiple = TRUE,
+                  #                selected = NULL,
+                  #                options = list(placeholder = "Filter by family")),
           # Substance selection
                   selectInput("substance_single",
                               "Select Substance:",
@@ -153,24 +154,24 @@ tabItem(tabName = "compare",
               width = 4,
               
               # Filter options
+              selectizeInput("substance_category1",
+                             label = NULL,
+                             choices = NULL,  # populated from data in the server
+                             multiple = TRUE,
+                             selected = NULL,
+                             options = list(placeholder = "Filter by category")),
               selectizeInput("substance_origins1",
                              label = NULL,
                              choices = NULL, # populated from data in the server
                              multiple = TRUE,
                              selected = NULL,
                              options = list(placeholder = "Filter by origin")),
-              selectizeInput("substance_types1",
-                             label = NULL,
-                             choices = NULL,  # populated from data in the server
-                             multiple = TRUE,
-                             selected = NULL,
-                             options = list(placeholder = "Filter by type")),
-              selectizeInput("substance_groups1",
-                             label = NULL,
-                             choices = NULL,  # populated from data in the server
-                             multiple = TRUE,
-                             selected = NULL,
-                             options = list(placeholder = "Filter by family")),
+              # selectizeInput("substance_groups1",
+              #                label = NULL,
+              #                choices = NULL,  # populated from data in the server
+              #                multiple = TRUE,
+              #                selected = NULL,
+              #                options = list(placeholder = "Filter by family")),
               # Substance selection
               selectInput("substance_double1",
                           "Select Substance:",
@@ -188,24 +189,25 @@ tabItem(tabName = "compare",
               width = 4,
               
               # Filter options
+              selectizeInput("substance_category2",
+                             label = NULL,
+                             choices = NULL,  # populated from data in the server
+                             multiple = TRUE,
+                             selected = NULL,
+                             options = list(placeholder = "Filter by category")),
               selectizeInput("substance_origins2",
                              label = NULL,
                              choices = NULL, # populated from data in the server
                              multiple = TRUE,
                              selected = NULL,
                              options = list(placeholder = "Filter by origin")),
-              selectizeInput("substance_types2",
-                             label = NULL,
-                             choices = NULL,  # populated from data in the server
-                             multiple = TRUE,
-                             selected = NULL,
-                             options = list(placeholder = "Filter by type")),
-              selectizeInput("substance_groups2",
-                             label = NULL,
-                             choices = NULL,  # populated from data in the server
-                             multiple = TRUE,
-                             selected = NULL,
-                             options = list(placeholder = "Filter by family")),
+             
+              # selectizeInput("substance_groups2",
+              #                label = NULL,
+              #                choices = NULL,  # populated from data in the server
+              #                multiple = TRUE,
+              #                selected = NULL,
+              #                options = list(placeholder = "Filter by family")),
               # Substance selection
               selectInput("substance_double2",
                           "Select Substance:",
