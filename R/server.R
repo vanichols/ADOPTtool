@@ -126,7 +126,7 @@ server <- function(input, output, session) {
 ###### Display load visualization as rose plot ######
   output$rose_plot <- renderPlot({
     req(input$substance_single)
-    adopt_Make_Rose_Plot(compound = input$substance_single, 
+    adopt_Make_Rose_Plot(compound_name = input$substance_single, 
                          #data = single_substance_data()
                          data = df)
   })
@@ -134,7 +134,7 @@ server <- function(input, output, session) {
   ###### Display load on distribution ######
   output$dist_plot <- renderPlot({
     req(input$substance_single)
-    adopt_Make_Distribution_Plot(compound = input$substance_single, 
+    adopt_Make_Distribution_Plot(compound_names = input$substance_single, 
                          data = df)
   })
   ###### Download data option ######
@@ -333,7 +333,7 @@ server <- function(input, output, session) {
   output$dist_plot_both <- renderPlot({
     req(input$substance_double1)
     req(input$substance_double2)
-    adopt_Make_Distribution_Plot(compounds = c(input$substance_double1,
+    adopt_Make_Distribution_Plot(compound_names = c(input$substance_double1,
                                                input$substance_double2),
                                  data = df)
   })
