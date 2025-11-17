@@ -31,6 +31,7 @@ ui <- shinydashboard::dashboardPage(
     ## product level visualisation/info, data sources (PPDB) and link to the publication.
     ## E.g.: (idea to develop, or not … not linked to any further UI or Server code)
      ,menuItem("  Substance Comparison View", tabName = "compare", icon = icon("flask-vial"))
+    ,menuItem("  Qualitative Data Analyses", tabName = "qual_data", icon = icon("leaf"))
       # ,menuItem("  Strategy View", tabName = "data", icon = icon("magnifying-glass-plus"))
       # ,menuItem("  Strategy Comparison View", tabName = "source", icon = icon("balance scale"))
     ),
@@ -259,7 +260,103 @@ tabItem(tabName = "compare",
         )
         
        
-)
+), #--end of second tab
+###### Body: Custom Data Upload Tab ######
+
+tabItem(tabName = "qual_data",
+        ## First row - Upload and template download controls
+        fluidRow(
+          
+          # Download template box
+          box(title = "Download Template",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 4,
+              height = "275px",
+              div(
+                style = "text-align: center; padding: 20px;",
+                p("Download a template file to fill in with your substance data:"),
+                br(),
+                downloadButton("download_template", 
+                               "Download Template (TSV)", 
+                               class = "btn-info btn-lg",
+                               icon = icon("download"),
+                               style = "background-color: #17a2b8; border-color: #17a2b8;"),
+                br(), br(),
+                p(style = "font-size: 12px; color: #666;", 
+                  "Fill in the template with substance names and application amounts, then upload it back.")
+              )
+          ),
+          
+          # Upload data box
+          box(title = "Upload Filled Template",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 4,
+              height = "275px",
+              div(
+                style = "padding: 15px;",
+                fileInput("upload_file",
+                          "Choose TSV File",
+                          accept = c(".tsv", ".txt"),
+                          placeholder = "No file selected"),
+                br(),
+                conditionalPanel(
+                  condition = "output.upload_status",
+                  div(
+                    style = "margin-top: 10px;",
+                    verbatimTextOutput("upload_status")
+                  )
+                )
+              )
+          ),
+          
+          # Generate plot button box
+          box(title = "Generate Visualization",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 4,
+              height = "275px",
+              div(
+                style = "text-align: center; padding: 20px;",
+                p("Create a plot using your uploaded data:"),
+                br(),
+                actionButton("generate_plot", 
+                             "Generate Plot", 
+                             class = "btn-success btn-lg",
+                             icon = icon("chart-bar"),
+                             style = "background-color: #28a745; border-color: #28a745;"),
+                br(), br(),
+                p(style = "font-size: 12px; color: #666;", 
+                  "Click to create visualization from uploaded data.")
+              )
+          )
+        ),
+        
+        ## Second row - Plot display
+        fluidRow(
+          box(title = "Custom Data Visualization",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 12,
+              div(
+                style = "min-height: 500px;",
+                conditionalPanel(
+                  condition = "output.custom_plot_available",
+                  plotOutput("custom_plot", height = "500px")
+                ),
+                conditionalPanel(
+                  condition = "!output.custom_plot_available",
+                  div(
+                    style = "text-align: center; padding: 50px; color: #999;",
+                    h4("No plot available"),
+                    p("Upload data and click 'Generate Plot' to display visualization here.")
+                  )
+                )
+              )
+          )
+        )
+) #--end of third tab
     )
   )
 )
