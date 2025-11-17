@@ -63,13 +63,15 @@ ui <- shinydashboard::dashboardPage(
 ###### Body: Single Substance Tab ######
 
       tabItem(tabName = "single",
+              ## First row
               fluidRow(
 
-      # Substance selection
+                # Substance selection box
                 box(title = "Substance Selection",
                     status = "primary", # "info",
                     solidHeader = TRUE,
                     width = 4,
+                    height = "275px",  # Added consistent height
 
           # Filter options
           selectizeInput("substance_category",
@@ -85,12 +87,6 @@ ui <- shinydashboard::dashboardPage(
                                  selected = NULL,
                                  options = list(placeholder = "Filter by origin")),
 
-                  # selectizeInput("substance_groups",
-                  #                label = NULL,
-                  #                choices = NULL,  # populated from data in the server
-                  #                multiple = TRUE,
-                  #                selected = NULL,
-                  #                options = list(placeholder = "Filter by family")),
           # Substance selection
                   selectInput("substance_single",
                               "Select Substance:",
@@ -98,17 +94,39 @@ ui <- shinydashboard::dashboardPage(
                               selected = NULL)
                 ),
 
-      # Substance information
+      # Substance information box
                 box(title = "Substance Information",
                     status = "primary", # "info",
                     solidHeader = TRUE,
-                    width = 8,
+                    width = 4,
+                    height = "275px",  # Added consistent height
                     verbatimTextOutput("substance_info")
-                )
+                ),
+      # Download Data box - replaced the data table
+      box(title = "Download Load Score Details",
+          status = "primary",
+          solidHeader = TRUE,
+          width = 4,
+          height = "275px",  # Added consistent height
+          div(
+            style = "text-align: center; padding: 20px;",
+            p("Download the detailed load score data for the selected substance:"),
+            br(),
+            downloadButton("download_data", 
+                           "Download Data (TSV)", 
+                           class = "btn-success btn-lg",  # Changed to green
+                           icon = icon("download"),
+                style = "background-color: #ffd74a; border-color: #ffd74a;")  # Custom green color
+            # downloadButton("download_data", 
+            #                "Download Data (TSV)", 
+            #                class = "btn-primary btn-lg",
+            #                icon = icon("download"))
+          )
+      )
               ),
-
-      # Two graphs, one rose and one distribution
+      ## Second row, two graphs (one rose and one distribution), blank area not sure what to do with
               fluidRow(
+                #--Rose plot box
                 box(title = "Load Scores by Compartment",
                     status = "primary",
                     solidHeader = TRUE,
@@ -116,34 +134,40 @@ ui <- shinydashboard::dashboardPage(
                     plotOutput("rose_plot",
                                height = "500px")
                 ),
+                #--Distribution box
                 box(title = "Load Score Relative to All Substances",
                     status = "primary",
                     solidHeader = TRUE,
-                    width = 8,
+                    width = 4,
                     plotOutput("dist_plot",
                                height = "500px")
+                ),
+                # Information and links box
+                box(title = "Additional Resources",
+                    status = "info",
+                    solidHeader = TRUE,
+                    width = 4,
+                    div(
+                      style = "padding: 15px;",
+                      h4("About Load Scores"),
+                      p("Load scores represent a relative toxicity burden ."),
+                      p("The visualization shows a substance's load scores for each compartment, as calculated by Vandervoode et al. (in review)"),
+                      br(),
+                      h4("Useful Links"),
+                      tags$ul(
+                        tags$li(tags$a("Pesticide Properties Database", href = "https://sitem.herts.ac.uk/aeru/ppdb/", target = "_blank")),
+                        tags$li(tags$a("PhD manuscript with more details and background", 
+                                       href = "https://sytra.be/publication/three-tools-reduction-pesticide-impacts/", target = "_blank"))
+                        
+                      ),
+                      br(),
+                      p(strong("To calculate the overall load, multiply the amount of substance applied by its load score."), 
+                        "See A FORTHCOMING PUBLICATION for more details.")
+                    )
                 )
-              ),
-
-
-      # Download Data section - replaced the data table
-      fluidRow(
-        box(title = "Download Load Score Details",
-            status = "primary",
-            solidHeader = TRUE,
-            width = 12,
-            div(
-              style = "text-align: center; padding: 20px;",
-              p("Download the detailed load score data for the selected substance:"),
-              br(),
-              downloadButton("download_data", 
-                             "Download Data (TSV)", 
-                             class = "btn-primary btn-lg",
-                             icon = icon("download"))
-            )
-        )
-      )
-      ),
+              )
+      
+      ), #--end of first tab 
 
 ###### Body: Two Substance Tab ######
 
