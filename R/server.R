@@ -136,9 +136,9 @@ server <- function(input, output, session) {
           "Total Risk Score: ",
           format(grand_total, digits = 2, nsmall = 2),
           "\n==================",
-          "\nLowest Risk Compound:",
+          "\nLowest Risk Application:",
           "\n", min_compound, " (", format(risk_min, digits = 2, nsmall = 2), ")",
-          "\n\nHighest Risk Compound:",
+          "\n\nHighest Risk Application:",
           "\n", max_compound, " (", format(risk_max, digits = 2, nsmall = 2), ")"
         )
       } else {
@@ -229,14 +229,6 @@ server <- function(input, output, session) {
           dplyr::filter(compound_category %in% input$substance_category)
       }
 
-    # # Filter by family only if a family is selected
-    #   if (!is.null(input$substance_groups) && length(input$substance_groups) > 0) {
-    #     df_filtered <- 
-    #       df_filtered |>
-    #       dplyr::filter(stringr::str_detect(tolower(compound_group), 
-    #                                         input$substance_groups))
-    #   }
-
     # Format final substance list
       df_filtered |>
         dplyr::pull(compound) |>
@@ -268,7 +260,6 @@ server <- function(input, output, session) {
 ###### Reduce data based on selected substance ######
   single_substance_data <- reactive({
     req(input$substance_single)
-    df <- adopt_hpli
     df[df$compound == input$substance_single, ]
   })
 
@@ -352,12 +343,6 @@ server <- function(input, output, session) {
       "substance_origins1",
       choices = unique(df$compound_origin) |>
         sort())
-   # # Substance family filter
-   #  updateSelectInput(
-   #    session,
-   #    "substance_groups1",
-   #    choices = unique(df$compound_group) |>
-   #      sort())
   },
   once = TRUE)
   
@@ -374,12 +359,6 @@ server <- function(input, output, session) {
       "substance_origins2",
       choices = unique(df$compound_origin) |>
         sort())
-    # # Substance family filter
-    # updateSelectInput(
-    #   session,
-    #   "substance_groups2",
-    #   choices = unique(df$compound_group) |>
-    #     sort())
   },
   once = TRUE)
   
@@ -405,13 +384,6 @@ server <- function(input, output, session) {
         dplyr::filter(compound_category %in% input$substance_category1)
     }
     
-    # # Filter by family only if a family is selected
-    # if (!is.null(input$substance_groups1) && length(input$substance_groups1) > 0) {
-    #   df_filtered1 <- 
-    #     df_filtered1 |>
-    #     dplyr::filter(stringr::str_detect(tolower(compound_group), 
-    #                                       input$substance_groups1))
-    # }
     
     # Format final substance list
     df_filtered1 |>

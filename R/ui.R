@@ -117,7 +117,7 @@ ui <- shinydashboard::dashboardPage(
           solidHeader = TRUE,
           width = 8,
           height = "500px",
-          rHandsontableOutput("hot_table")
+          rhandsontable::rHandsontableOutput("hot_table")
         ),
         box(
           title = "Summary Statistics",
