@@ -1,6 +1,7 @@
 # server.R
 library(shiny)
 library(shinydashboard)
+library(dplyr)
 library(ADOPTpkg)
 
 #### Server ####################################################################
