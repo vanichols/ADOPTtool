@@ -1,16 +1,9 @@
 # app.R
-# Gina Nichols, adapted from 
-# Noé Vandevoorde, October 2025
 
+#### Main app file #############################################################
+source("global.R")
 
-#### Packages ##################################################################
-
-library(shiny)
-library(shinydashboard)
-#devtools::install_github("vanichols/ADOPTpkg", force = T)
-library(ADOPTpkg)
-
-#### Sources ###################################################################
+#### Source ui and server ######################################################
 
 source("R/ui.R")
 source("R/server.R")
@@ -19,3 +12,5 @@ source("R/server.R")
 #### Run the app ###############################################################
 
 shinyApp(ui = ui, server = server)
+
+
