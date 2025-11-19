@@ -22,21 +22,28 @@ ui <- shinydashboard::dashboardPage(
     
     shinydashboard::sidebarMenu(
       menuItem(
-        "  Single Substance View",
+        "  Explore Pesticide Compounds",
         tabName = "single",
         icon = icon("flask")
       )
-      ## Other tabs could be added, such as a comparison View, detailed data table,
-      ## product level visualisation/info, data sources (PPDB) and link to the publication.
-      ## E.g.: (idea to develop, or not … not linked to any further UI or Server code)
       ,
       menuItem(
-        "  Substance Comparison View",
+        "  Compare Pesticide Compounds",
         tabName = "compare",
         icon = icon("flask-vial")
       )
-      # ,menuItem("  Strategy View", tabName = "data", icon = icon("magnifying-glass-plus"))
-      # ,menuItem("  Strategy Comparison View", tabName = "source", icon = icon("balance scale"))
+      ,
+      menuItem(
+        "Pesticide Data Analyses",
+        tabName = "pest_table",
+        icon = icon("bugs")
+      )
+      ,
+      menuItem(
+        "  Qualitative Data Analyses",
+        tabName = "qual_data",
+        icon = icon("leaf")
+      )
     ),
     
     ### Credit info, ADOPT IPM logo ###
@@ -64,7 +71,6 @@ ui <- shinydashboard::dashboardPage(
   
   shinydashboard::dashboardBody(tabItems(
     ###### Body: Single Substance Tab ######
-    
     tabItem(
       tabName = "single",
       ## First row
@@ -316,6 +322,47 @@ ui <- shinydashboard::dashboardPage(
       )
       
       
-    )
-  ))
+    ),
+    #--end of tab
+    
+    
+    ###### Body: Pesticide table tab ######
+    tabItem(
+      tabName = "pest_table",
+      # First row: Table and Summary Statistics side by side
+      fluidRow(
+        box(
+          title = "Editable Table with Calculations",
+          status = "primary",
+          solidHeader = TRUE,
+          width = 8,
+          height = "500px",
+          rHandsontableOutput("hot_table")
+        ),
+        box(
+          title = "Summary Statistics",
+          status = "info",
+          solidHeader = TRUE,
+          width = 4,
+          height = "500px",
+          verbatimTextOutput("summary")
+        )
+      ),
+      # Second row: Data Information spanning full width
+      fluidRow(
+        box(
+          title = "Data Information",
+          status = "success",
+          solidHeader = TRUE,
+          width = 12,
+          valueBoxOutput("total_risk"),
+          valueBoxOutput("item_count"),
+          valueBoxOutput("filled_rows")
+        )
+      )
+      
+    ) #--end of tab
+  ))   #--end of dashboard body
+  
+  
 )

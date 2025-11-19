@@ -10,6 +10,8 @@ library(shiny)
 library(shinydashboard)
 library(readxl)
 library(janitor)
+library(rhandsontable)
+library(DT)
 
 #--tidyverse packages
 library(tidyverse)

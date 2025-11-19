@@ -8,9 +8,9 @@ server <- function(input, output, session) {
   #--shiny assistant says this shouldn't be here, need to test...
     df <- data_hpli #--data for first tab at least...
   
-  # First tab ====
+  # Single substance tab =======================================================
   
-  ###### Populate filter lists (runs once at app startup) ######
+ #--Populate filter lists (runs once at app startup)
   
   
   observeEvent(TRUE, {
@@ -176,7 +176,7 @@ server <- function(input, output, session) {
     }
   )
   
-  # Second tab ====
+  # Compare substances tab =====================================================
   
   ###### Populate filter lists (runs once at app startup) ######
   
@@ -333,6 +333,177 @@ server <- function(input, output, session) {
                          data = df)
   })
   
+  # Pesticide data entry tab ===================================================
+  # Initialize reactive values
+  values <- reactiveValues()
   
+  # Initialize the data frame
+  observe({
+    if (is.null(values$data)) {
+      # Create initial data frame with 5 rows
+      initial_rows <- 5
+      values$data <- data.frame(
+        Compound = rep("", initial_rows),
+        Load_Score = rep(0, initial_rows),
+        Quantity_Applied = rep(0, initial_rows),
+        Risk_Score = rep(0, initial_rows),
+        stringsAsFactors = FALSE
+      )
+    }
+  })
+  
+  # Add row functionality
+  observeEvent(input$add_row, {
+    if (nrow(values$data) < input$max_rows) {
+      new_row <- data.frame(
+        Compound = "",
+        Load_Score = 0,
+        Quantity_Applied = 0,
+        Risk_Score = 0,
+        stringsAsFactors = FALSE
+      )
+      values$data <- rbind(values$data, new_row)
+    }
+  })
+  
+  # Remove row functionality
+  observeEvent(input$remove_row, {
+    if (nrow(values$data) > 1) {
+      values$data <- values$data[-nrow(values$data), ]
+    }
+  })
+  
+  # Render the handsontable
+  output$hot_table <- renderRHandsontable({
+    if (!is.null(values$data)) {
+      # Update calculations before rendering
+      for (i in 1:nrow(values$data)) {
+        if (values$data$Compound[i] != "" && !is.na(values$data$Quantity_Applied[i])) {
+          # Look up load score based on Compound
+          Load_Score <- df$load_score[df$compound == values$data$Compound[i]]
+          if (length(Load_Score) > 0) {
+            values$data$Load_Score[i] <- Load_Score
+            # Calculate Risk_Score
+            values$data$Risk_Score[i] <- values$data$Load_Score[i] * values$data$Quantity_Applied[i]
+          }
+        }
+      }
+      
+      rhandsontable(values$data, rowHeaders = TRUE, height = 350,
+                    # Set column widths: Compound wider, others standard
+                    colWidths = c(180, 100, 140, 100)) %>%
+        hot_col("Compound", 
+                type = "dropdown", 
+                source = as.character(df$compound),
+                allowInvalid = FALSE) %>%
+        hot_col("Load_Score", readOnly = TRUE, type = "numeric", format = "0.000") %>%
+        hot_col("Quantity_Applied", type = "numeric", format = "0.000") %>%
+        hot_col("Risk_Score", readOnly = TRUE, format = "0.000") %>%
+        hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE)
+    }
+  })
+  
+  # Update data when table is edited
+  observeEvent(input$hot_table, {
+    if (!is.null(input$hot_table)) {
+      # Get the updated data
+      updated_data <- hot_to_r(input$hot_table)
+      
+      # Process each row for auto-population and calculations
+      for (i in 1:nrow(updated_data)) {
+        if (!is.na(updated_data$Compound[i]) &&
+            updated_data$Compound[i] != "") {
+          # Auto-populate load score based on Compound
+          matching_row <- df[df$compound == updated_data$Compound[i], ]
+          if (nrow(matching_row) > 0) {
+            updated_data$Load_Score[i] <- matching_row$load_score[1]
+          }
+          
+          # Calculate Risk_Score (Load_Score * Quantity_Applied)
+          if (!is.na(updated_data$Quantity_Applied[i]) &&
+              updated_data$Quantity_Applied[i] > 0) {
+            updated_data$Risk_Score[i] <- updated_data$Load_Score[i] * updated_data$Quantity_Applied[i]
+          } else {
+            updated_data$Risk_Score[i] <- 0
+          }
+        } else {
+          # Reset values if no Compound selected
+          updated_data$Load_Score[i] <- 0
+          updated_data$Risk_Score[i] <- 0
+        }
+      }
+      
+      values$data <- updated_data
+    }
+  })
+  
+  # Summary output
+  output$summary <- renderText({
+    if (!is.null(values$data)) {
+      # Filter to only filled rows (compounds that have been selected)
+      filled_data <- values$data[values$data$Compound != "" & !is.na(values$data$Compound), ]
+      
+      if (nrow(filled_data) > 0) {
+        grand_total <- sum(values$data$Risk_Score, na.rm = TRUE)
+        
+        # Find min and max risk scores among filled rows
+        risk_min <- min(filled_data$Risk_Score, na.rm = TRUE)
+        risk_max <- max(filled_data$Risk_Score, na.rm = TRUE)
+        
+        # Find compounds with min and max risk scores
+        min_compound <- filled_data$Compound[which(filled_data$Risk_Score == risk_min)[1]]
+        max_compound <- filled_data$Compound[which(filled_data$Risk_Score == risk_max)[1]]
+        
+        paste(
+          "Total Risk Score: ",
+          format(grand_total, digits = 2, nsmall = 2),
+          "\n==================",
+          "\nLowest Risk Compound:",
+          "\n", min_compound, " (", format(risk_min, digits = 2, nsmall = 2), ")",
+          "\n\nHighest Risk Compound:",
+          "\n", max_compound, " (", format(risk_max, digits = 2, nsmall = 2), ")"
+        )
+      } else {
+        "No compounds have been selected yet."
+      }
+    }
+  })
+  
+  # Value boxes for dashboard display
+  output$total_risk <- renderValueBox({
+    if (!is.null(values$data)) {
+      grand_total <- sum(values$data$Risk_Score, na.rm = TRUE)
+      valueBox(
+        value = format(grand_total, digits = 2, nsmall = 2),
+        subtitle = "Total Risk Score",
+        icon = icon("exclamation-triangle"),
+        color = "red"
+      )
+    }
+  })
+  
+  output$item_count <- renderValueBox({
+    if (!is.null(values$data)) {
+      total_items <- sum(values$data$Quantity_Applied, na.rm = TRUE)
+      valueBox(
+        value = format(total_items, digits = 2, nsmall = 2),
+        subtitle = "Total Quantity of Compounds Applied",
+        icon = icon("cubes"),
+        color = "blue"
+      )
+    }
+  })
+  
+  output$filled_rows <- renderValueBox({
+    if (!is.null(values$data)) {
+      filled_rows <- sum(values$data$Compound != "", na.rm = TRUE)
+      valueBox(
+        value = filled_rows,
+        subtitle = "Number of Applications Entered",
+        icon = icon("list"),
+        color = "yellow"
+      )
+    }
+  })
   
 }
