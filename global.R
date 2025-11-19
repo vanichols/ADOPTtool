@@ -9,13 +9,14 @@
 library(shiny)
 library(shinydashboard)
 library(readxl)
+library(janitor)
 
 #--tidyverse packages
-library(dplyr)
-library(tidyr)
-library(forcats)
-library(janitor)
-library(stringr)
+library(tidyverse)
+#library(dplyr)
+#library(tidyr)
+#library(forcats)
+#library(stringr)
 
 #--ggplot things
 library(ggplot2)

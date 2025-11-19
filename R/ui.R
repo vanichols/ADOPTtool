@@ -12,15 +12,15 @@ ui <- shinydashboard::dashboardPage(
   
   ###### Header ##################################################################
   
-  dashboardHeader(title = "ADOPT-IPM online tool"),
+  shinydashboard::dashboardHeader(title = "ADOPT-IPM online tool"),
   
   
   ###### Sidebar #################################################################
   
-  dashboardSidebar(
+  shinydashboard::dashboardSidebar(
     ### Menu ###
     
-    sidebarMenu(
+    shinydashboard::sidebarMenu(
       menuItem(
         "  Single Substance View",
         tabName = "single",
@@ -62,7 +62,7 @@ ui <- shinydashboard::dashboardPage(
   
   ###### Body ####################################################################
   
-  dashboardBody(tabItems(
+  shinydashboard::dashboardBody(tabItems(
     ###### Body: Single Substance Tab ######
     
     tabItem(
@@ -165,7 +165,7 @@ ui <- shinydashboard::dashboardPage(
         # Information and links box
         box(
           title = "Additional Resources",
-          status = "primary",
+          status = "info",
           solidHeader = TRUE,
           width = 4,
           div(

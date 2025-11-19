@@ -3,7 +3,6 @@
 rm(list = ls())
 
 library(readxl)
-library(readr)
 library(dplyr)
 library(ggplot2)
 
@@ -22,4 +21,4 @@ d2 <-
 data_example <- d2
 
 data_example |> 
-  write_rds("data/processed/data_example.RDS")
+  saveRDS("data/processed/data_example.RDS")

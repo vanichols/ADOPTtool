@@ -2,8 +2,8 @@
 
 rm(list = ls())
 
-library(readxl)
 library(readr)
+library(readxl)
 library(dplyr)
 library(ggplot2)
 
