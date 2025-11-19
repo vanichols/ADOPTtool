@@ -1,7 +1,4 @@
 # ui.R
-library(shiny)
-library(shinydashboard)
-library(ADOPTpkg)
 
 # Gina Nichols, adapted from code created by
 # Noé Vandevoorde octobre 2025
@@ -168,7 +165,7 @@ ui <- shinydashboard::dashboardPage(
         # Information and links box
         box(
           title = "Additional Resources",
-          status = "info",
+          status = "primary",
           solidHeader = TRUE,
           width = 4,
           div(

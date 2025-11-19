@@ -1,15 +1,12 @@
 # server.R
-library(shiny)
-library(shinydashboard)
-library(ADOPTpkg)
+
 
 #### Server ####################################################################
 
 server <- function(input, output, session) {
-  #--max size is 160 MB
-  #options(shiny.maxRequestSize = 160*1024^2) #--recommended based on a help website
-  #--use the data from the ADOPTpkg
-  df <- adopt_hpli #--data for first tab at least...
+  
+  #--shiny assistant says this shouldn't be here, need to test...
+    df <- data_hpli #--data for first tab at least...
   
   # First tab ====
   
@@ -86,7 +83,7 @@ server <- function(input, output, session) {
   ###### Reduce data based on selected substance ######
   single_substance_data <- reactive({
     req(input$substance_single)
-    df <- adopt_hpli
+    df <- data_hpli
     df[df$compound == input$substance_single, ]
   })
   
@@ -129,14 +126,14 @@ server <- function(input, output, session) {
   ###### Display load visualization as rose plot ######
   output$rose_plot <- renderPlot({
     req(input$substance_single)
-    adopt_Make_Rose_Plot(compound_name = input$substance_single,
+    fxn_Make_Rose_Plot(compound_name = input$substance_single,
                          data = df)
   })
   
   ###### Display load on distribution ######
   output$dist_plot <- renderPlot({
     req(input$substance_single)
-    adopt_Make_Distribution_Plot(compound_names = input$substance_single,
+    fxn_Make_Distribution_Plot(compound_names = input$substance_single,
                                  data = df)
   })
   ###### Download data option ######
@@ -318,13 +315,13 @@ server <- function(input, output, session) {
   ###### Display HPL visualisation graph ######
   output$rose_plot1 <- renderPlot({
     req(input$substance_double1)
-    adopt_Make_Rose_Plot(compound_name = input$substance_double1,
+    fxn_Make_Rose_Plot(compound_name = input$substance_double1,
                          data = df)
   })
   
   output$dist_plot_both <- renderPlot({
     req(input$substance_double1)
-    adopt_Make_Distribution_Plot(
+    fxn_Make_Distribution_Plot(
       compound_names = c(input$substance_double1, input$substance_double2),
       data = df
     )
@@ -332,7 +329,7 @@ server <- function(input, output, session) {
   
   output$rose_plot2 <- renderPlot({
     req(input$substance_double2)
-    adopt_Make_Rose_Plot(compound_name = input$substance_double2,
+    fxn_Make_Rose_Plot(compound_name = input$substance_double2,
                          data = df)
   })
   

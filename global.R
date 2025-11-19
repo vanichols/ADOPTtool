@@ -8,14 +8,29 @@
 
 library(shiny)
 library(shinydashboard)
+library(readxl)
+
+#--tidyverse packages
 library(dplyr)
 library(tidyr)
+library(forcats)
+library(janitor)
+library(stringr)
+
+#--ggplot things
+library(ggplot2)
+library(ggridges)
+library(patchwork)
+library(ggrepel)
+library(ggnewscale)
 
 
-# Source utility functions
+# Source utility functions (rose plot, distribution plot)
 source("R/utils.R")
 
 # Load data
+
+#--this is still called inside the server as well, sort of
 data_hpli <- 
   read_rds("data/processed/data_hpli.RDS")
 

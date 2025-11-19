@@ -3,19 +3,13 @@
 #' @param compound_name Name of desired compound.
 #' @param data The adopt_hpli dataset.
 #' @returns A rose plot
-#' @import dplyr
-#' @import tidyr
-#' @import ggnewscale
-#' @import ggplot2
-#' @import stringr
-#' @export
+
 
 # #--for testing
 # compound_name <- "diquat"
-# data <- adopt_hpli
-# #---
+# data <- data_hpli
 
-adopt_Make_Rose_Plot <- function(compound_name = "diquat",
+fxn_Make_Rose_Plot <- function(compound_name = "diquat",
                                  data = adopt_hpli) {
   metric_colors2 <- c(
     "Environmental fate" =  "#31a354",
@@ -187,15 +181,8 @@ adopt_Make_Rose_Plot <- function(compound_name = "diquat",
 #' @param compound_names Vector of desired compounds, length of one or more.
 #' @param data The adopt_hpli dataset.
 #' @returns A distribution of all compounds with the selected one(s) highlighted
-#' @import dplyr
-#' @import tidyr
-#' @import ggnewscale
-#' @import ggplot2
-#' @import stringr
-#' @import ggrepel
-#' @export
 
-adopt_Make_Distribution_Plot <- function(compound_names = c("diquat", "glyphosate"),
+fxn_Make_Distribution_Plot <- function(compound_names = c("diquat", "glyphosate"),
                                          data = adopt_hpli) {
   metric_colors2 <- c(
     "Environmental fate" =  "#31a354",
